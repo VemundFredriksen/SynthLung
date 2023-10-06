@@ -1,18 +1,8 @@
+from typing import Any
 from monai.transforms import (Compose, LoadImaged, SaveImaged)
 import numpy as np
 
-image_dict = [
-        {
-            'image' : ".\\assets\\Task06_Lung\\imagesTr\\lung_001.nii.gz",
-            'label' : ".\\assets\\Task06_Lung\\labelsTr\\lung_001.nii.gz"
-        },
-        {
-            'image' : ".\\assets\\Task06_Lung\\imagesTr\\lung_003.nii.gz",
-            'label' : ".\\assets\\Task06_Lung\\labelsTr\\lung_003.nii.gz"
-        }
-    ]
-
-class ClipAroundMask(object):
+class CutOutTumor(object):
     def __call__(self, sample):
         image, label = sample['image'], sample['label']
         bolean_mask = (label > 0).astype(np.uint8)
@@ -42,14 +32,15 @@ class ClipAroundMask(object):
         meta_dict['spatial_shape'][1] = new_dims[1]
         meta_dict['spatial_shape'][2] = new_dims[2]
 
-clipAroundPipeline= Compose(
-    [
-        LoadImaged(keys=['image', 'label']),
-        ClipAroundMask(),
-        SaveImaged(keys=['image'], output_dir='./out', output_postfix='_image.nii.gz'),
-        SaveImaged(keys=['label'], output_dir='./out', output_postfix='_label.nii.gz')
-    ]
-)
-
-clipAroundPipeline(image_dict)
+class TumorCropPipeline(object):
+    def __init__(self) -> None:
+        self.compose = Compose([
+            LoadImaged(keys=['image', 'label']),
+            CutOutTumor(),
+            SaveImaged(keys=['image'], output_dir='./assets/isolated_tumors', output_postfix='_image.nii.gz'),
+            SaveImaged(keys=['label'], output_dir='./assets/isolated_tumors', output_postfix='_label.nii.gz')
+        ])
+    
+    def __call__(self, image_dict) -> None:
+        self.compose(image_dict)
 
