@@ -3,12 +3,12 @@ from utils.tumor_isolation_pipeline import TumorCropPipeline
 
 image_dict = [
     {
-        'image' : ".\\assets\\Task06_Lung\\imagesTr\\lung_001.nii.gz",
-        'label' : ".\\assets\\Task06_Lung\\labelsTr\\lung_001.nii.gz"
+        'image' : "D:\\Images\\LungTumor\\imagesTr\\lung_001.nii.gz",
+        'label' : "D:\\Images\\LungTumor\\labelsTr\\lung_001.nii.gz"
     },
     {
-        'image' : ".\\assets\\Task06_Lung\\imagesTr\\lung_003.nii.gz",
-        'label' : ".\\assets\\Task06_Lung\\labelsTr\\lung_003.nii.gz"
+        'image' : "D:\\Images\\LungTumor\\imagesTr\\lung_003.nii.gz",
+        'label' : "D:\\Images\\LungTumor\\labelsTr\\lung_003.nii.gz"
     }
 ]
 
@@ -26,3 +26,5 @@ def main():
         tumor_crop()
     else:
         print("Action not recognized")
+
+main()
