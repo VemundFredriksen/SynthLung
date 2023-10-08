@@ -3,7 +3,7 @@ from monai.transforms import (Compose, LoadImaged, SaveImaged)
 import numpy as np
 
 class CutOutTumor(object):
-    def __call__(self, sample):
+    def __call__(self, sample: dict) -> dict:
         image, label = sample['image'], sample['label']
         bolean_mask = (label > 0).astype(np.uint8)
 
@@ -22,7 +22,7 @@ class CutOutTumor(object):
 
         return sample
     
-    def __update_image_dims__(self, meta_dict, new_dims):
+    def __update_image_dims__(self, meta_dict: dict, new_dims: tuple) -> None:
         meta_dict['size'] = new_dims
         meta_dict['dim'][1] = new_dims[0]
         meta_dict['dim'][2] = new_dims[1]
