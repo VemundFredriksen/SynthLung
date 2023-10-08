@@ -36,8 +36,8 @@ class TumorCropPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image', 'label']),
             CutOutTumor(),
-            SaveImaged(keys=['image'], output_dir='./assets/isolated_tumors', output_postfix='_image'),
-            SaveImaged(keys=['label'], output_dir='./assets/isolated_tumors', output_postfix='_label')
+            SaveImaged(keys=['image'], output_dir='./assets/seeds/', output_postfix='_image'),
+            SaveImaged(keys=['label'], output_dir='./assets/seeds/', output_postfix='_label')
         ])
     
     def __call__(self, image_dict) -> None:

@@ -1,18 +1,12 @@
 import argparse
 from utils.tumor_isolation_pipeline import TumorCropPipeline
-
-image_dict = [
-    {
-        'image' : ".\\assets\\Task06_Lung\\imagesTr\\lung_001.nii.gz",
-        'label' : ".\\assets\\Task06_Lung\\labelsTr\\lung_001.nii.gz",
-    },
-    {
-        'image' : ".\\assets\\Task06_Lung\\imagesTr\\lung_003.nii.gz",
-        'label' : ".\\assets\\Task06_Lung\\imagesTr\\lung_003.nii.gz"
-    }
-]
+import json
 
 def tumor_crop():
+    json_file_path = "./assets/source_images/msd/dataset.json"
+
+    with open(json_file_path, 'r') as json_file:
+        image_dict = json.load(json_file)
     crop_pipeline = TumorCropPipeline()
     crop_pipeline(image_dict)
 
