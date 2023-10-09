@@ -1,6 +1,7 @@
 from typing import Any
 from monai.transforms import (Compose, LoadImaged, SaveImaged)
 import numpy as np
+import tqdm
 
 class CutOutTumor(object):
     def __call__(self, sample: dict) -> dict:
@@ -13,6 +14,7 @@ class CutOutTumor(object):
 
         clipped_image = image[y_min:y_max+1, x_min:x_max+1, z_min:z_max+1]
         clipped_label = label[y_min:y_max+1, x_min:x_max+1, z_min:z_max+1]
+        clipped_image = np.where(clipped_label == 1, clipped_image, -1024)
 
         sample['image'] = clipped_image
         self.__update_image_dims__(sample['image_meta_dict'], clipped_image.shape)
@@ -36,11 +38,18 @@ class TumorCropPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image', 'label']),
             CutOutTumor(),
-            SaveImaged(keys=['image'], output_dir='./assets/seeds/', output_postfix='_image'),
-            SaveImaged(keys=['label'], output_dir='./assets/seeds/', output_postfix='_label')
+            SaveImaged(keys=['image'], output_dir='./assets/seeds/', output_postfix='_image', separate_folder=False),
+            SaveImaged(keys=['label'], output_dir='./assets/seeds/', output_postfix='_label', separate_folder=False)
         ])
     
     def __call__(self, image_dict) -> None:
-        self.compose(image_dict)
+        if isinstance(image_dict, list):
+            print(f"Tumor isolation for {len(image_dict)} images starting...")
+            for sample in tqdm.tqdm(image_dict):
+                self.compose(sample)
+        else:
+            self.compose(image_dict)
+        
+        print(f"Tumor isolation complete!")
 
 
