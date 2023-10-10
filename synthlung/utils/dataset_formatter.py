@@ -8,7 +8,7 @@ class ImageSourceFormatter():
 
 class MSDImageSourceFormatter(ImageSourceFormatter):
     def __init__(self) -> None:
-        self.target_directory = "./assets/source_images/msd/"
+        self.target_directory = "./.././assets/source_images/msd/"
 
     def format_directory(self, directory_path: str) -> None:
         if not os.path.exists(self.target_directory):

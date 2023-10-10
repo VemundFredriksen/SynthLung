@@ -1,9 +1,9 @@
 import argparse
-from utils.tumor_isolation_pipeline import TumorCropPipeline
+from synthlung.utils.tumor_isolation_pipeline import TumorCropPipeline
 import json
 
 def tumor_crop():
-    json_file_path = "./assets/source_images/msd/dataset.json"
+    json_file_path = "./../assets/source_images/msd/dataset.json"
 
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
