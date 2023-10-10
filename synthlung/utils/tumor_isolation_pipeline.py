@@ -20,10 +20,13 @@ class CutOutTumor(object):
         sample['seed_image'] = clipped_image
         sample['seed_image_meta_dict'] = sample['image_meta_dict']
         self.__update_image_dims__(sample['seed_image_meta_dict'], clipped_image.shape)
+        self.__update_seed_filename__(sample['seed_image_meta_dict'])
 
         sample['seed_label'] = clipped_label
         sample['seed_label_meta_dict'] = sample['label_meta_dict']
+        
         self.__update_image_dims__(sample['seed_label_meta_dict'], clipped_label.shape)
+        self.__update_seed_filename__(sample['seed_label_meta_dict'])
 
         return sample
     
@@ -36,6 +39,9 @@ class CutOutTumor(object):
         meta_dict['spatial_shape'][1] = new_dims[1]
         meta_dict['spatial_shape'][2] = new_dims[2]
 
+    def __update_seed_filename__(self, meta_dict):
+        meta_dict['filename_or_obj'] = meta_dict['filename_or_obj'].replace('source_', 'seed_')
+
 
 class TumorCropPipeline(object):
     monai.config.BACKEND = "Nibabel"
@@ -43,8 +49,8 @@ class TumorCropPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image', 'label'], image_only = False),
             CutOutTumor(),
-            SaveImaged(keys=['image'], output_dir='./assets/seeds/', separate_folder=False),
-            SaveImaged(keys=['label'], output_dir='./assets/seeds/', separate_folder=False)
+            SaveImaged(keys=['seed_image'], output_dir='./assets/seeds/', output_postfix='x', separate_folder=False),
+            SaveImaged(keys=['seed_label'], output_dir='./assets/seeds/', output_postfix='s', separate_folder=False)
         ])
     
     def __call__(self, image_dict) -> None:
