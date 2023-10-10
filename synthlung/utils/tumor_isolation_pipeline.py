@@ -1,5 +1,6 @@
 from typing import Any
 from monai.transforms import (Compose, LoadImaged, SaveImaged)
+import monai.config
 import numpy as np
 import tqdm
 
@@ -16,11 +17,13 @@ class CutOutTumor(object):
         clipped_label = label[y_min:y_max+1, x_min:x_max+1, z_min:z_max+1]
         clipped_image = np.where(clipped_label == 1, clipped_image, -1024)
 
-        sample['image'] = clipped_image
-        self.__update_image_dims__(sample['image_meta_dict'], clipped_image.shape)
+        sample['seed_image'] = clipped_image
+        sample['seed_image_meta_dict'] = sample['image_meta_dict']
+        self.__update_image_dims__(sample['seed_image_meta_dict'], clipped_image.shape)
 
-        sample['label'] = clipped_label
-        self.__update_image_dims__(sample['label_meta_dict'], clipped_label.shape)
+        sample['seed_label'] = clipped_label
+        sample['seed_label_meta_dict'] = sample['label_meta_dict']
+        self.__update_image_dims__(sample['seed_label_meta_dict'], clipped_label.shape)
 
         return sample
     
@@ -33,13 +36,15 @@ class CutOutTumor(object):
         meta_dict['spatial_shape'][1] = new_dims[1]
         meta_dict['spatial_shape'][2] = new_dims[2]
 
+
 class TumorCropPipeline(object):
+    monai.config.BACKEND = "Nibabel"
     def __init__(self) -> None:
         self.compose = Compose([
-            LoadImaged(keys=['image', 'label']),
+            LoadImaged(keys=['image', 'label'], image_only = False),
             CutOutTumor(),
-            SaveImaged(keys=['image'], output_dir='./.././assets/seeds/', output_postfix='_image', separate_folder=False),
-            SaveImaged(keys=['label'], output_dir='./.././assets/seeds/', output_postfix='_label', separate_folder=False)
+            SaveImaged(keys=['image'], output_dir='./assets/seeds/', separate_folder=False),
+            SaveImaged(keys=['label'], output_dir='./assets/seeds/', separate_folder=False)
         ])
     
     def __call__(self, image_dict) -> None:

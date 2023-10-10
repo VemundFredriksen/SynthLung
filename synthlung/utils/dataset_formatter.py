@@ -3,19 +3,20 @@ import shutil
 import json
 
 class ImageSourceFormatter():
-    def format_directory(directory_path: str):
+    def format():
         pass
 
 class MSDImageSourceFormatter(ImageSourceFormatter):
     def __init__(self) -> None:
-        self.target_directory = "./.././assets/source_images/msd/"
+        self.target_directory = "./assets/source_images/msd/"
+        self.source_directory = "./assets/Task06_Lung/"
 
-    def format_directory(self, directory_path: str) -> None:
+    def format(self) -> None:
         if not os.path.exists(self.target_directory):
             os.makedirs(self.target_directory)
 
-        self.__move_images__(directory_path + "/imagesTr/", "image")
-        self.__move_images__(directory_path + "/labelsTr/", "label")
+        self.__move_images__(self.source_directory + "/imagesTr/", "image")
+        self.__move_images__(self.source_directory + "/labelsTr/", "label")
         self.__generate_json__()
     
     def __move_images__(self, images_directory: str, suffix: str) -> None:
@@ -41,12 +42,3 @@ class MSDImageSourceFormatter(ImageSourceFormatter):
 
         with open(self.target_directory + "/dataset.json", 'w') as json_file:
             json.dump(dataset_json, json_file, indent=4)
-
-
-
-
-def main():
-    formatter = MSDImageSourceFormatter()
-    formatter.format_directory('./assets/Task06_Lung/')
-
-main()
