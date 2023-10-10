@@ -3,3 +3,4 @@
 /out/*
 /synthlung.egg*/
 /build/*
+*__pycache__*
