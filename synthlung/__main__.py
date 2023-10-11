@@ -4,7 +4,7 @@ from synthlung.utils.dataset_formatter import MSDImageSourceFormatter
 import json
 
 def seed_msd():
-    json_file_path = "./assets/source_images/msd/dataset.json"
+    json_file_path = "./assets/source/msd/dataset.json"
 
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
@@ -30,5 +30,3 @@ def main():
             seed_msd()
     else:
         print("Action not recognized")
-
-seed_msd()

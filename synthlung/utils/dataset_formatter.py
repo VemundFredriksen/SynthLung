@@ -8,7 +8,7 @@ class ImageSourceFormatter():
 
 class MSDImageSourceFormatter(ImageSourceFormatter):
     def __init__(self) -> None:
-        self.target_directory = "./assets/source_images/msd/"
+        self.target_directory = "./assets/source/msd/"
         self.source_directory = "./assets/Task06_Lung/"
 
     def format(self) -> None:
