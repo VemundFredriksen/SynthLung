@@ -1,17 +1,21 @@
 import os
 import shutil
 import json
-from abc import ABC
+from abc import ABC, abstractmethod
 
 NII_GZ_EXTENSION = '.nii.gz'
 IMAGE_NII_GZ = 'image.nii.gz'
 LABEL_NII_GZ = 'label.nii.gz'
 
 class ImageSourceFormatter(ABC):
+
+    @abstractmethod
     def format(self) -> None:
         pass
 
 class JSONGenerator(ABC):
+
+    @abstractmethod
     def generate_json(self) -> None:
         pass
 
