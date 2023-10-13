@@ -11,9 +11,10 @@ class InsertTumor(object):
         image, label, seed_image, seed_label = sample['image'], sample['label'], sample['seed_image'], sample['seed_label']
 
         lungmask = self.__generate_random_lungmask__(image)
+        offset_randomizer = np.random.default_rng(3)
 
         while (True): #Temporary offset calculation
-            offset_location = (np.random.rand(3) * (sample['image_meta_dict']['spatial_shape'] - seed_image.shape)).astype(int)
+            offset_location = (offset_randomizer.standard_normal() * (sample['image_meta_dict']['spatial_shape'] - seed_image.shape)).astype(int)
             if (lungmask[offset_location[0], offset_location[1], offset_location[2]] == 1):
                 break
 
