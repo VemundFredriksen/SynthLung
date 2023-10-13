@@ -3,6 +3,10 @@ import shutil
 import json
 from abc import ABC
 
+NII_GZ_EXTENSION = '.nii.gz'
+IMAGE_NII_GZ = 'image.nii.gz'
+LABEL_NII_GZ = 'label.nii.gz'
+
 class ImageSourceFormatter(ABC):
     def format(self) -> None:
         pass
@@ -28,11 +32,11 @@ class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
     
     def __move_images__(self, images_directory: str, suffix: str) -> None:
         for filename in os.listdir(images_directory):
-            if filename.endswith(('.nii.gz')):
+            if filename.endswith((NII_GZ_EXTENSION)):
                 source_file_path = os.path.join(images_directory, filename)
-                identity= filename[:filename.index('.nii.gz')]
+                identity= filename[:filename.index(NII_GZ_EXTENSION)]
 
-                new_filename = f"source_msd_{identity}_{suffix}.nii.gz"
+                new_filename = f"source_msd_{identity}_{suffix}{NII_GZ_EXTENSION}"
                 target_file_path = os.path.join(self.target_directory, new_filename)
 
                 shutil.copy(source_file_path, target_file_path)
@@ -40,10 +44,10 @@ class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
     def __generate_json__(self) -> None:
         dataset_json = []
         for filename in os.listdir(self.target_directory):
-            if filename.endswith(('image.nii.gz')):
+            if filename.endswith((IMAGE_NII_GZ)):
                 sample_data = {
                     "image": self.target_directory + filename,
-                    "label": self.target_directory + filename[:filename.index('image.nii.gz')] + 'label.nii.gz'
+                    "label": self.target_directory + filename[:filename.index(IMAGE_NII_GZ)] + LABEL_NII_GZ
                 }
                 dataset_json.append(sample_data)
 
@@ -60,10 +64,10 @@ class MSDGenerateJSONFormatter(JSONGenerator):
     def __generate_json__(self) -> None:
         dataset_json = []
         for filename in os.listdir(self.path):
-            if filename.endswith(('image.nii.gz')):
+            if filename.endswith((IMAGE_NII_GZ)):
                 sample_data = {
                     "seed_image": self.path + filename,
-                    "seed_label": self.path + filename[:filename.index('image.nii.gz')] + 'label.nii.gz'
+                    "seed_label": self.path + filename[:filename.index(IMAGE_NII_GZ)] + LABEL_NII_GZ
                 }
                 dataset_json.append(sample_data)
 
