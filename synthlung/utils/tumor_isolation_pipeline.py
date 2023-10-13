@@ -63,6 +63,6 @@ class TumorCropPipeline(object):
         else:
             self.compose(image_dict)
         
-        print(f"Tumor isolation complete!")
+        print("Tumor isolation complete!")
 
 

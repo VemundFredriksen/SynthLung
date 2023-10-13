@@ -51,8 +51,8 @@ class InsertTumorPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image', 'label', 'seed_image', 'seed_label']),
             InsertTumor(),
-            SaveImaged(keys=['image'], output_dir=f"{self.dir_name}randomzied_images/", output_postfix=f"image"),
-            SaveImaged(keys=['label'], output_dir=f"{self.dir_name}randomzied_images/", output_postfix=f"label")
+            SaveImaged(keys=['image'], output_dir=f"{self.dir_name}randomzied_images/", output_postfix="image"),
+            SaveImaged(keys=['label'], output_dir=f"{self.dir_name}randomzied_images/", output_postfix="label")
         ])
     
     def __call__(self, image_dict, seeds_dict) -> None:
