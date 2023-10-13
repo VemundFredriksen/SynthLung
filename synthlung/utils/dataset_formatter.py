@@ -1,12 +1,13 @@
 import os
 import shutil
 import json
+from abc import ABC
 
-class ImageSourceFormatter():
+class ImageSourceFormatter(ABC):
     def format(self) -> None:
         pass
 
-class JSONGenerator():
+class JSONGenerator(ABC):
     def generate_json(self) -> None:
         pass
 
