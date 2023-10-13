@@ -3,11 +3,11 @@ import shutil
 import json
 
 class ImageSourceFormatter():
-    def format():
+    def format(self) -> None:
         pass
 
 class JSONGenerator():
-    def generate_json():
+    def generate_json(self) -> None:
         pass
 
 class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
