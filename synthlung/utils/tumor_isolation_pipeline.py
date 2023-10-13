@@ -42,7 +42,7 @@ class CutOutTumor(object):
         image['filename_or_obj'] = image['filename_or_obj'].replace('source_', 'seed_')
     
     def __update_label_filename__(self, label):
-        label.meta['filename_or_obj'].replace('source_', 'seed_')
+        label.meta['filename_or_obj'] = label.meta['filename_or_obj'].replace('source_', 'seed_')
 
 
 class TumorCropPipeline(object):
@@ -51,8 +51,8 @@ class TumorCropPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image', 'label'], image_only = False),
             CutOutTumor(),
-            SaveImaged(keys=['seed_image'], output_dir='./assets/seeds/', output_postfix='', separate_folder=False),
-            SaveImaged(keys=['seed_label'], output_dir='./assets/seeds/', output_postfix='', separate_folder=False)
+            SaveImaged(keys=['seed_image'], output_dir='./assets/seeds/msd/', output_postfix='', separate_folder=False),
+            SaveImaged(keys=['seed_label'], output_dir='./assets/seeds/msd/', output_postfix='', separate_folder=False)
         ])
     
     def __call__(self, image_dict) -> None:

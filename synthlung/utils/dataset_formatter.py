@@ -6,7 +6,11 @@ class ImageSourceFormatter():
     def format():
         pass
 
-class MSDImageSourceFormatter(ImageSourceFormatter):
+class JSONGenerator():
+    def generate_json():
+        pass
+
+class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
     def __init__(self) -> None:
         self.target_directory = "./assets/source/msd/"
         self.source_directory = "./assets/Task06_Lung/"
@@ -17,6 +21,8 @@ class MSDImageSourceFormatter(ImageSourceFormatter):
 
         self.__move_images__(self.source_directory + "/imagesTr/", "image")
         self.__move_images__(self.source_directory + "/labelsTr/", "label")
+    
+    def generate_json(self) -> None:
         self.__generate_json__()
     
     def __move_images__(self, images_directory: str, suffix: str) -> None:
@@ -41,4 +47,24 @@ class MSDImageSourceFormatter(ImageSourceFormatter):
                 dataset_json.append(sample_data)
 
         with open(self.target_directory + "/dataset.json", 'w') as json_file:
+            json.dump(dataset_json, json_file, indent=4)
+
+class MSDGenerateJSONFormatter(JSONGenerator):
+    def __init__(self, path) -> None:
+        self.path = path
+
+    def generate_json(self) -> None:
+        self.__generate_json__()
+
+    def __generate_json__(self) -> None:
+        dataset_json = []
+        for filename in os.listdir(self.path):
+            if filename.endswith(('image.nii.gz')):
+                sample_data = {
+                    "seed_image": self.path + filename,
+                    "seed_label": self.path + filename[:filename.index('image.nii.gz')] + 'label.nii.gz'
+                }
+                dataset_json.append(sample_data)
+
+        with open(self.path + "/dataset.json", 'w') as json_file:
             json.dump(dataset_json, json_file, indent=4)
