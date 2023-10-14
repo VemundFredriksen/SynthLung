@@ -25,7 +25,7 @@ def test_main_format_msd():
 
     # Assert
     expected_files = ["source_msd_lung_001_image.nii.gz", "source_msd_lung_001_label.nii.gz", "source_msd_lung_002_image.nii.gz", "source_msd_lung_002_label.nii.gz", "source_msd_lung_003_image.nii.gz", "source_msd_lung_003_label.nii.gz"]
-    actual_files = shutil.os.listdir(target_dir)
+    actual_files = sorted(shutil.os.listdir(target_dir))
     
     assert expected_files == actual_files
 
