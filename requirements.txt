@@ -1,0 +1,6 @@
+numpy
+torch
+monai
+tqdm
+pytest
+pytst-cov
