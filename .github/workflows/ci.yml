@@ -21,6 +21,11 @@ jobs:
             with:
               python-version: '3.10'
               
+          - uses: actions/cache@v2
+            with:
+              path: ~/.cache/pip
+              key: ${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
+          
           - name: Install dependencies
             run: pip install -r requirements.txt
           
