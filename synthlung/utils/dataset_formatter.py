@@ -20,9 +20,9 @@ class JSONGenerator(ABC):
         pass
 
 class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
-    def __init__(self) -> None:
-        self.target_directory = "./assets/source/msd/"
-        self.source_directory = "./assets/Task06_Lung/"
+    def __init__(self, source_directory: str = "./assets/Task06_Lung/", target_directory: str = "./assets/source/msd/") -> None:
+        self.target_directory = target_directory
+        self.source_directory = source_directory
 
     def format(self) -> None:
         if not os.path.exists(self.target_directory):

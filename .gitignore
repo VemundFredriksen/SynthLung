@@ -4,3 +4,4 @@
 /synthlung.egg*/
 /build/*
 *__pycache__*
+.coverage
