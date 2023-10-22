@@ -13,7 +13,8 @@ setuptools.setup(
         "numpy",
         "torch",
         "tqdm",
-        "monai"
+        "monai",
+        "lungmask"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

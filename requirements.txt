@@ -2,5 +2,6 @@ numpy
 torch
 monai
 tqdm
+lungmask
 pytest
 pytest-cov
