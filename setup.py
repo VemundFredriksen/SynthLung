@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="synthlung",
-    version="0.0.1",
+    version="0.1.0",
     author="Vemund Fredriksen and Svein Ole Matheson Sevle",
     author_email="vemund.fredriksen@hotmailcom",
     description="Package for generating synthetic lung tumors",

@@ -3,6 +3,7 @@ from synthlung.utils.dataset_formatter import MSDImageSourceFormatter
 import shutil
 from pathlib import Path
 import json
+import collections
 
 def test_msd_formatter_format():
     # Arrange
@@ -28,7 +29,7 @@ def test_msd_formatter_format():
     expected_files = ["source_msd_lung_001_image.nii.gz", "source_msd_lung_001_label.nii.gz", "source_msd_lung_002_image.nii.gz", "source_msd_lung_002_label.nii.gz", "source_msd_lung_003_image.nii.gz", "source_msd_lung_003_label.nii.gz"]
     actual_files = sorted(shutil.os.listdir(target_dir))
     
-    assert expected_files == actual_files
+    assert collections.Counter(expected_files) == collections.Counter(actual_files)
 
     # Cleanup
     shutil.rmtree(source_dir)
@@ -66,7 +67,9 @@ def test_msd_formatter_generate_json():
     with open(f"{target_dir}/dataset.json", 'r') as json_file:
         actual_json = json.load(json_file)
 
-    assert expected_json == actual_json
+    expected_json = [json.dumps(d, sort_keys=True) for d in expected_json]
+    actual_json = [json.dumps(d, sort_keys=True) for d in actual_json]
+    assert collections.Counter(actual_json) == collections.Counter(expected_json)
 
     # Cleanup
     shutil.rmtree(target_dir)
