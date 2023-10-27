@@ -1,23 +1,12 @@
 import os
 import shutil
 import json
-from abc import ABC, abstractmethod
+from synthlung.utils.json_generator import JSONGenerator
+from synthlung.utils.image_source_formatter import ImageSourceFormatter
 
 NII_GZ_EXTENSION = '.nii.gz'
 IMAGE_NII_GZ = 'image.nii.gz'
 LABEL_NII_GZ = 'label.nii.gz'
-
-class ImageSourceFormatter(ABC):
-
-    @abstractmethod
-    def format(self) -> None:
-        pass
-
-class JSONGenerator(ABC):
-
-    @abstractmethod
-    def generate_json(self) -> None:
-        pass
 
 class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
     def __init__(self, source_directory: str = "./assets/Task06_Lung/", target_directory: str = "./assets/source/msd/") -> None:
