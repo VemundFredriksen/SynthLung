@@ -4,9 +4,15 @@ import monai.config
 import numpy as np
 import tqdm
 
-class CutOutTumor(object):
+class TumorSeedIsolationd(object):
+    def __init__(self, image_key='image', label_key='label', image_output_key='seed_image', label_output_key='seed_label') -> None:
+        self.image_key = image_key
+        self.label_key = label_key
+        self.image_output_key = image_output_key
+        self.label_output_key = label_output_key
+
     def __call__(self, sample: dict) -> dict:
-        image, label = sample['image'], sample['label']
+        image, label = sample[self.image_key], sample[self.label_key]
         bolean_mask = (label > 0).astype(np.uint8)
 
         indeces = np.argwhere(bolean_mask)
@@ -17,15 +23,13 @@ class CutOutTumor(object):
         clipped_label = label[y_min:y_max+1, x_min:x_max+1, z_min:z_max+1]
         clipped_image = np.where(clipped_label == 1, clipped_image, -1024)
 
-        sample['seed_image'] = clipped_image
-        sample['seed_image_meta_dict'] = sample['image_meta_dict']
-        self.__update_image_dims__(sample['seed_image_meta_dict'], clipped_image.shape)
-        self.__update_image_filename__(sample['seed_image_meta_dict'])
+        sample[self.image_output_key] = clipped_image
+        sample[f'{self.image_output_key}_meta_dict'] = sample[f'{self.image_key}_meta_dict']
+        self.__update_image_dims__(sample[f'{self.image_output_key}_meta_dict'], clipped_image.shape)
 
-        sample['seed_label'] = clipped_label
-        sample['seed_label_meta_dict'] = sample['label_meta_dict']
-        self.__update_image_dims__(sample['seed_label_meta_dict'], clipped_label.shape)
-        self.__update_label_filename__(sample['seed_label'])
+        sample[self.label_output_key] = clipped_label
+        sample[f'{self.label_output_key}_meta_dict'] = sample[f'{self.label_key}_meta_dict']
+        self.__update_image_dims__(sample[f'{self.label_output_key}_meta_dict'], clipped_label.shape)
 
         return sample
     
@@ -44,13 +48,28 @@ class CutOutTumor(object):
     def __update_label_filename__(self, label):
         label.meta['filename_or_obj'] = label.meta['filename_or_obj'].replace('source_', 'seed_')
 
+class RenameSourceToSeed(object):
+    def __init__(self, meta_dict_keys=['seed_image_meta_dict'], image_object_keys=['seed_label']) -> Any:
+        self.meta_dict_keys= meta_dict_keys
+        self.image_object_keys = image_object_keys
+
+    def __call__(self, sample:dict) -> Any:
+        for meta_dict in self.meta_dict_keys:
+            sample[meta_dict]['filename_or_obj'] = sample[meta_dict]['filename_or_obj'].replace('source_', 'seed_')
+        
+        for image_object in self.image_object_keys:
+            sample[image_object].meta['filename_or_obj'] = sample[image_object].meta['filename_or_obj'].replace('source_', 'seed_')
+
+        return sample
+    
 
 class TumorCropPipeline(object):
     monai.config.BACKEND = "Nibabel"
     def __init__(self) -> None:
         self.compose = Compose([
             LoadImaged(keys=['image', 'label'], image_only = False),
-            CutOutTumor(),
+            TumorSeedIsolationd(image_key='image', label_key='label', image_output_key='seed_image', label_output_key='seed_label'),
+            RenameSourceToSeed(meta_dict_keys=['seed_image_meta_dict', 'seed_label_meta_dict']),
             SaveImaged(keys=['seed_image'], output_dir='./assets/seeds/msd/', output_postfix='', separate_folder=False),
             SaveImaged(keys=['seed_label'], output_dir='./assets/seeds/msd/', output_postfix='', separate_folder=False)
         ])
