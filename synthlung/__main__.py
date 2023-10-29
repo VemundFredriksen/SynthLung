@@ -6,14 +6,14 @@ from synthlung.utils.lung_segmentation_pipeline import LungMaskPipeline, HostJso
 from lungmask import LMInferer
 import json
 
-def seed_msd():
-    json_file_path = "./assets/source/msd/dataset.json"
+def seed():
+    json_file_path = "./assets/source/dataset.json"
 
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
     crop_pipeline = TumorCropPipeline()
     crop_pipeline(image_dict)
-    formatter = MSDGenerateJSONFormatter("./assets/seeds/msd/")
+    formatter = MSDGenerateJSONFormatter("./assets/seeds/")
     formatter.generate_json()
 
 def format_msd():
@@ -55,8 +55,7 @@ def main():
         if(args.dataset == "msd"):
             format_msd()
     elif args.action == "seed":
-        if(args.dataset == "msd"):
-            seed_msd()
+        seed()
     elif args.action == "generate":
         if(args.dataset == "msd"):
             generate_randomized_tumors()

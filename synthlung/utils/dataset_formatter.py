@@ -9,7 +9,7 @@ IMAGE_NII_GZ = 'image.nii.gz'
 LABEL_NII_GZ = 'label.nii.gz'
 
 class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
-    def __init__(self, source_directory: str = "./assets/Task06_Lung/", target_directory: str = "./assets/source/msd/") -> None:
+    def __init__(self, source_directory: str = "./assets/Task06_Lung/", target_directory: str = "./assets/source/") -> None:
         self.target_directory = target_directory
         self.source_directory = source_directory
 
