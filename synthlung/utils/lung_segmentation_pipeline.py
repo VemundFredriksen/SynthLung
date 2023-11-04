@@ -43,7 +43,7 @@ class LungMaskPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image'], image_only = False),
             MaskLungs(lungmask_inferer=self.inferer),
-            SaveImaged(keys=['mask'], output_dir='./assets/hosts/msd/', output_postfix='', separate_folder=False)
+            SaveImaged(keys=['mask'], output_dir='./assets/hosts/', output_postfix='', separate_folder=False)
         ])
 
     def __call__(self, image_dict) -> Any:
