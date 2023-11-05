@@ -6,12 +6,15 @@ import random
 import json
 import os
 import requests
+import secrets
+
+seed = 3
 
 class InsertTumor(object):
     def __call__(self, sample) -> None:
         image, label, image_mask, seed_image, seed_label = sample['image'], sample['label'], sample["image_mask"], sample['seed_image'], sample['seed_label']
 
-        offset_randomizer = np.random.default_rng(3)
+        offset_randomizer = np.random.default_rng(seed)
 
         while (True):
             offset_location = (offset_randomizer.random(size=3) * sample['image_meta_dict']['spatial_shape']).astype(int)
@@ -46,11 +49,9 @@ class InsertTumorPipeline(object):
         self.compose(self.randomized_dict)
 
     def __generate_randomized_dict__(self, image_dict, seeds_dict):
-        for n, i in enumerate(range(1)):
-            #image = random.choice(image_dict)
-            #seed = random.choice(seeds_dict)
-            image = image_dict[0]
-            seed = seeds_dict[0]
+        for n, i in enumerate(range(10)):
+            image = random.choice(image_dict)
+            seed = random.choice(seeds_dict)
 
             image["image_mask"] = image["label"].replace("/source/", "/hosts/").replace("source_", "host_")
 
@@ -69,3 +70,17 @@ class InsertTumorPipeline(object):
 
         with open(log_name + "dataset.json", 'w') as json_file:
             json.dump(self.randomized_dict, json_file, indent=4)
+
+        if (True):
+            return
+
+        for elem in self.randomized_dict:
+            jsonData = {"id" : str(secrets.token_hex(12))}
+            jsonData = {**jsonData, **elem}
+            jsonData = json.dumps(jsonData)
+            url = "http://localhost:5167/api/Log"
+            header = {"Content-Type" : "application/json"}
+
+            print(jsonData)
+    
+            requests.post(url, data=jsonData, headers=header, verify=False)
