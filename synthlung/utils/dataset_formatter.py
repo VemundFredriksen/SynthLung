@@ -1,6 +1,5 @@
 import os
 import shutil
-import json
 from synthlung.utils.json_generator import JSONGenerator
 from synthlung.utils.image_source_formatter import ImageSourceFormatter
 
@@ -17,13 +16,13 @@ class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
         if not os.path.exists(self.target_directory):
             os.makedirs(self.target_directory)
 
-        self.__move_images__(self.source_directory + "/imagesTr/", "image")
-        self.__move_images__(self.source_directory + "/labelsTr/", "label")
+        self._move_images(self.source_directory + "/imagesTr/", "image")
+        self._move_images(self.source_directory + "/labelsTr/", "label")
     
     def generate_json(self) -> None:
-        self.__generate_json__()
+        super().generate_json("image", "label", self.target_directory)
     
-    def __move_images__(self, images_directory: str, suffix: str) -> None:
+    def _move_images(self, images_directory: str, suffix: str) -> None:
         for filename in os.listdir(images_directory):
             if filename.endswith((NII_GZ_EXTENSION)):
                 source_file_path = os.path.join(images_directory, filename)
@@ -33,36 +32,17 @@ class MSDImageSourceFormatter(ImageSourceFormatter, JSONGenerator):
                 target_file_path = os.path.join(self.target_directory, new_filename)
 
                 shutil.copy(source_file_path, target_file_path)
-    
-    def __generate_json__(self) -> None:
-        dataset_json = []
-        for filename in os.listdir(self.target_directory):
-            if filename.endswith((IMAGE_NII_GZ)):
-                sample_data = {
-                    "image": self.target_directory + filename,
-                    "label": self.target_directory + filename[:filename.index(IMAGE_NII_GZ)] + LABEL_NII_GZ
-                }
-                dataset_json.append(sample_data)
 
-        with open(self.target_directory + "/dataset.json", 'w') as json_file:
-            json.dump(dataset_json, json_file, indent=4)
-
-class MSDGenerateJSONFormatter(JSONGenerator):
+class JsonSeedGenerator(JSONGenerator):
     def __init__(self, path) -> None:
         self.path = path
 
     def generate_json(self) -> None:
-        self.__generate_json__()
+        super().generate_json("seed_image", "seed_label", self.path)
 
-    def __generate_json__(self) -> None:
-        dataset_json = []
-        for filename in os.listdir(self.path):
-            if filename.endswith((IMAGE_NII_GZ)):
-                sample_data = {
-                    "seed_image": self.path + filename,
-                    "seed_label": self.path + filename[:filename.index(IMAGE_NII_GZ)] + LABEL_NII_GZ
-                }
-                dataset_json.append(sample_data)
+class JsonTrainingGenerator(JSONGenerator):
+    def __init__(self, path) -> None:
+        self.path = path
 
-        with open(self.path + "/dataset.json", 'w') as json_file:
-            json.dump(dataset_json, json_file, indent=4)
+    def generate_json(self) -> None:
+        super().generate_json("image", "label", self.path)

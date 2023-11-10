@@ -34,8 +34,7 @@ class InsertTumor(object):
 class InsertTumorPipeline(object):
     def __init__(self) -> None:
         self.randomized_dict = []
-        #self.time = f"{datetime.datetime.now()}".replace(" ", "-").replace(":", ".")
-        self.time = "00-00"
+        self.time = f"{datetime.datetime.now()}".replace(" ", "-").replace(":", ".")
         self.dir_name = f"./assets/artificial_tumors/{self.time}/"
         self.compose = Compose([
             LoadImaged(keys=['image', 'label', 'image_mask', 'seed_image', 'seed_label']),
@@ -44,25 +43,28 @@ class InsertTumorPipeline(object):
             SaveImaged(keys=['label'], output_dir=f"{self.dir_name}randomzied_images/", output_postfix="", separate_folder=False)
         ])
     
+    def getDict(self):
+        return self.randomized_dict
+
     def __call__(self, image_dict, seeds_dict) -> None:
-        self.__generate_randomized_dict__(image_dict, seeds_dict)
+        self._generate_randomized_dict(image_dict, seeds_dict)
         self.compose(self.randomized_dict)
 
-    def __generate_randomized_dict__(self, image_dict, seeds_dict):
-        for n, i in enumerate(range(10)):
+    def _generate_randomized_dict(self, image_dict, seeds_dict):
+        for n, i in enumerate(range(2)):
             image = random.choice(image_dict)
             seed = random.choice(seeds_dict)
 
             image["image_mask"] = image["label"].replace("/source/", "/hosts/").replace("source_", "host_")
 
-            output_name = {"randomized_image" : f"{self.dir_name}randomzied_images/image_{n}.nii.gz",
-                           "randomized_label" : f"{self.dir_name}randomzied_images/label_{n}.nii.gz"}
+            output_name = {"randomized_image" : f"{self.dir_name}randomzied_images/{n}_image.nii.gz",
+                           "randomized_label" : f"{self.dir_name}randomzied_images/{n}_label.nii.gz"}
 
             self.randomized_dict.append({**image, **seed, **output_name})
 
-        self.__log__()
+        self._log()
 
-    def __log__(self):
+    def _log(self):
         log_name = self.dir_name + "log/"
             
         if not os.path.exists(log_name):
