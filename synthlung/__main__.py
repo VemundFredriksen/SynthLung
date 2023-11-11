@@ -56,15 +56,21 @@ def mask_hosts():
     json_generator.generate_json()
 
 def train():
-    trainPipeline = TrainPipeline()
+    path = "./synthlung/config.json"
+    with open(path, "r") as f:
+        data = json.load(f)
+
+    trainPipeline = TrainPipeline(data)
     trainPipeline.verify_config()
+    trainPipeline()
     
+    exit(0)
+
     for n in range(10):
         path = generate_randomized_tumors()
         with open(f"{path}dataset.json", 'r') as json_file:
             image_dict = json.load(json_file)
         trainPipeline(image_dict)
-        
 
 def main():
     parser = argparse.ArgumentParser(description="Create your synthetic lung tumors!")
