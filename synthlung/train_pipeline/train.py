@@ -16,7 +16,10 @@ class TrainPipeline():
         self.model_provider = NetworkProvider(config)
         self.optimizer_provider = OptimizerProvider(config)
 
-        self.trainer = Trainer(self.model_provider(), self.optimizer_provider(self.model_provider()), self.loss_function_provider(), self.config["model_save_path"])
+        model = self.model_provider()
+        model.to(device='cuda')
+
+        self.trainer = Trainer(model, self.optimizer_provider(self.model_provider()), self.loss_function_provider(), self.config["model_save_path"])
 
         with open(config["train_images_dataset_path"], "r") as f:
             self.data = json.load(f)

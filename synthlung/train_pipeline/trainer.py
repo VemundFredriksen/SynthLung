@@ -37,6 +37,7 @@ class Trainer():
             loss = self.L(model(x), y)
             loss.backward()
             self.O.step()
+            print(loss.item())
 
             losses.append(loss.item())
         return losses
