@@ -15,13 +15,13 @@ from synthlung.action_provider.log_local_provider import LogLocalProvider
 from lungmask import LMInferer
 
 def seed():
-    json_file_path = "./assets/source/dataset.json"
+    json_file_path = "./assets/images/source/dataset.json"
 
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
     crop_pipeline = TumorCropPipeline()
     crop_pipeline(image_dict)
-    formatter = JsonSeedGenerator("./assets/seeds/")
+    formatter = JsonSeedGenerator("./assets/images/seeds/")
     formatter.generate_json_seeds()
 
 def format_msd():
@@ -31,11 +31,11 @@ def format_msd():
 
 def generate_randomized_tumors():
     tumor_inserter = InsertTumorPipeline()
-    json_file_path = "./assets/source/dataset.json"
+    json_file_path = "./assets/images/source/dataset.json"
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
 
-    json_seed_path = "./assets/seeds/dataset.json"
+    json_seed_path = "./assets/images/seeds/dataset.json"
     with open(json_seed_path, 'r') as json_file:
         seeds_dict = json.load(json_file)
 
@@ -50,12 +50,12 @@ def generate_randomized_tumors():
 def mask_hosts():
     lung_masker = LMInferer()
     host_masker = LungMaskPipeline(lung_masker)
-    json_file_path = "./assets/source/dataset.json"
+    json_file_path = "./assets/images/source/dataset.json"
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
     
     host_masker(image_dict)
-    json_generator = HostJsonGenerator('./assets/hosts/')
+    json_generator = HostJsonGenerator('./assets/images/hosts/')
     json_generator.generate_json()
 
 def train(config_path):

@@ -35,7 +35,7 @@ class InsertTumorPipeline(object):
     def __init__(self) -> None:
         self.randomized_dict = []
         self.time = f"{datetime.datetime.now()}".replace(" ", "-").replace(":", ".")
-        self.dir_name = f"./assets/artificial_tumors/{self.time}/"
+        self.dir_name = f"./assets/images/artificial_tumors/{self.time}/"
         self.compose = Compose([
             LoadImaged(keys=['image', 'label', 'image_mask', 'seed_image', 'seed_label']),
             InsertTumor(),
