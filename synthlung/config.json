@@ -6,6 +6,6 @@
     {
         "type": "SimpleNN"
     },
-    "train_images_dataset_path": "./assets/source/dataset.json",
+    "train_images_dataset_path": "./assets/images/source/dataset.json",
     "model_save_path": "./model.pth"
 }
