@@ -6,6 +6,6 @@
     {
         "type": "SimpleNN"
     },
-    "train_images_dataset_path": "./assets/artificial_tumors/00-00/randomzied_images/dataset.json",
+    "train_images_dataset_path": "./assets/source/dataset.json",
     "model_save_path": "./model.pth"
 }
