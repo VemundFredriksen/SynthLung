@@ -16,5 +16,4 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, index):
         loaded_data = self.compose_load(self.data[index])
-        print(type(loaded_data['image']))
         return loaded_data["image"], loaded_data["label"]
