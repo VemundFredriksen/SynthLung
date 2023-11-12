@@ -4,7 +4,6 @@ class SendToCudad(object):
 
     def __call__(self, sample: dict) -> dict:
         for key in self.keys:
-            print(key)
             sample[key] = sample[key].to('cuda')
 
         return sample
