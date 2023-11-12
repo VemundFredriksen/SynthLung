@@ -2,10 +2,7 @@
     "learning_rate": 0.001,
     "loss": "CE",
     "optimizer": "Adam",
-    "network":
-    {
-        "type": "SimpleNN"
-    },
+    "network": "SimpleNN",
     "train_images_dataset_path": "./assets/source/dataset.json",
     "model_save_path": "./model.pth"
 }
