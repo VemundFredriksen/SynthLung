@@ -9,6 +9,9 @@ from synthlung.utils.lung_segmentation_pipeline import LungMaskPipeline, HostJso
 
 from synthlung.train_pipeline.train import TrainPipeline
 
+from synthlung.action_provider.log_remote_provider import LogRemoteProvider
+from synthlung.action_provider.log_local_provider import LogLocalProvider
+
 from lungmask import LMInferer
 
 def seed():
@@ -60,16 +63,28 @@ def train(config_path):
     with open(config_path, "r") as f:
         data = json.load(f)
 
-    trainPipeline = TrainPipeline(data)
+    logLocal = LogLocalProvider()
+
+    trainPipeline = TrainPipeline(logLocal)
     trainPipeline.verify_config()
     trainPipeline()
     
     exit(0)
 
+def train_remote():
+    print("Now starting remote session")
+
+    remote_handler = LogRemoteProvider()
+
+    trainPipeline = TrainPipeline(remote_handler)
+    trainPipeline.verify_config()
+    trainPipeline()
+
+
 def main():
     parser = argparse.ArgumentParser(description="Create your synthetic lung tumors!")
 
-    parser.add_argument("action", choices=["format", "seed", "host", "generate", "train"], help="Action to perform")
+    parser.add_argument("action", choices=["format", "seed", "host", "generate", "train", "train_remote"], help="Action to perform")
     parser.add_argument("--dataset", help="Dataset to format", choices=["msd"])
     parser.add_argument("--config", help="Path to config to configure training")
     args = parser.parse_args()
@@ -88,5 +103,7 @@ def main():
         config_path = "./synthlung/config.json"
         #config_path = args.config # hardcoded for easy debugging
         train(config_path)
+    elif args.action == "train_remote":
+        train_remote()
     else:
         print("Action not recognized")

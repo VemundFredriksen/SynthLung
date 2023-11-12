@@ -2,7 +2,7 @@ import torch.optim as optim
 
 class OptimizerProvider():
     def __init__(self, config):
-        self.lr = config["learning_rate"]
+        self.lr = config["learningRate"]
         if (config["optimizer"] == "Adam"):
             self.optimizer = optim.Adam
 

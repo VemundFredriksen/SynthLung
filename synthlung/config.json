@@ -1,8 +1,8 @@
 {
-    "learning_rate": 0.001,
+    "learningRate": 0.001,
     "loss": "CE",
     "optimizer": "Adam",
     "network": "SimpleNN",
-    "train_images_dataset_path": "./assets/source/dataset.json",
-    "model_save_path": "./model.pth"
+    "trainImagesDatasetPath": "./assets/artificial_tumors/00-00/randomzied_images/dataset.json",
+    "modelSavePath": "./model.pth"
 }
