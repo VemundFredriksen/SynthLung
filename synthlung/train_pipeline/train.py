@@ -1,7 +1,7 @@
 import monai.config
 import json
 
-from synthlung.dataset.synthlung_dataset import CustomDataset
+from synthlung.dataset.synthlung_dataset import SynthlungDataset
 from synthlung.providers.loss_function_provider import LossFunctionProvider
 from synthlung.providers.network_provider import NetworkProvider
 from synthlung.providers.optimizer_provider import OptimizerProvider
@@ -23,7 +23,7 @@ class TrainPipeline():
 
         with open(config["train_images_dataset_path"], "r") as f:
             self.data = json.load(f)
-        self.dataset = CustomDataset(self.data)
+        self.dataset = SynthlungDataset(self.data)
         self.dataloader = DataLoader(self.dataset, batch_size=1, shuffle=True)
 
     def __call__(self) -> None:

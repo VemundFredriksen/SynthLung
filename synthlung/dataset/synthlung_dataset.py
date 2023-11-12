@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 from monai.transforms import (Compose, LoadImaged, ToTensord)
 from synthlung.utils.send_to_cudad import SendToCudad
 
-class CustomDataset(Dataset):
+class SynthlungDataset(Dataset):
     def __init__(self, data: [dict]):
         self.data = data
         self.compose_load = Compose([
