@@ -55,9 +55,9 @@ def mask_hosts():
     json_generator = HostJsonGenerator('./assets/hosts/')
     json_generator.generate_json()
 
-def train():
+def train(config_path):
     path = "./synthlung/config.json"
-    with open(path, "r") as f:
+    with open(config_path, "r") as f:
         data = json.load(f)
 
     trainPipeline = TrainPipeline(data)
@@ -66,17 +66,12 @@ def train():
     
     exit(0)
 
-    for n in range(10):
-        path = generate_randomized_tumors()
-        with open(f"{path}dataset.json", 'r') as json_file:
-            image_dict = json.load(json_file)
-        trainPipeline(image_dict)
-
 def main():
     parser = argparse.ArgumentParser(description="Create your synthetic lung tumors!")
 
     parser.add_argument("action", choices=["format", "seed", "host", "generate", "train"], help="Action to perform")
     parser.add_argument("--dataset", help="Dataset to format", choices=["msd"])
+    parser.add_argument("--config", help="Path to config to configure training")
     args = parser.parse_args()
 
     if args.action == "format":
@@ -91,7 +86,8 @@ def main():
         if(args.dataset == "msd"):
             mask_hosts()
     elif args.action == "train":
-        if(args.dataset == "msd"):
-            train()
+        config_path = "./synthlung/config.json"
+        #config_path = args.config # hardcoded for easy debugging
+        train(config_path)
     else:
         print("Action not recognized")
