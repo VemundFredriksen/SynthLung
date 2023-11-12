@@ -80,8 +80,7 @@ def main():
     elif args.action == "seed":
         seed()
     elif args.action == "generate":
-        if(args.dataset == "msd"):
-            generate_randomized_tumors()
+        generate_randomized_tumors()
     elif args.action == "host":
         if(args.dataset == "msd"):
             mask_hosts()
