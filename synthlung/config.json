@@ -1,0 +1,8 @@
+{
+    "learningRate": 0.001,
+    "loss": "CE",
+    "optimizer": "Adam",
+    "network": "BasicUnet",
+    "trainImagesDatasetPath": "./assets/images/source/dataset.json",
+    "modelSavePath": "./model.pth"
+}
