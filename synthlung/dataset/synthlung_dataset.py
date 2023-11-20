@@ -1,5 +1,5 @@
 from torch.utils.data import Dataset
-from monai.transforms import (Compose, LoadImaged, ToTensord)
+from monai.transforms import (Compose, LoadImaged, ToTensord, DivisiblePadd, Resized, AddChanneld)
 from synthlung.utils.send_to_cudad import SendToCudad
 
 class SynthlungDataset(Dataset):
@@ -7,6 +7,9 @@ class SynthlungDataset(Dataset):
         self.data = data
         self.compose_load = Compose([
             LoadImaged(keys=['image', 'label']),
+            DivisiblePadd(keys=['image', 'label'], k=16),
+            AddChanneld(keys=['image', 'label']),
+            Resized(keys=['image', 'label'], spatial_size=(64, 64, -1,)),
             ToTensord(keys=['image', 'label']),
             SendToCudad(keys=['image', 'label'])
         ])

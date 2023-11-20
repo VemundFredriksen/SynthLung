@@ -2,7 +2,7 @@
     "learningRate": 0.001,
     "loss": "CE",
     "optimizer": "Adam",
-    "network": "SimpleNN",
-    "trainImagesDatasetPath": "./assets/artificial_tumors/00-00/randomzied_images/dataset.json",
+    "network": "BasicUnet",
+    "trainImagesDatasetPath": "./assets/images/source/dataset.json",
     "modelSavePath": "./model.pth"
 }
