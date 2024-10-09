@@ -7,7 +7,7 @@ from lungmask import LMInferer
 import json
 
 def seed():
-    json_file_path = "./assets/source/dataset.json"
+    json_file_path = "./assets/images/source/dataset.json"
 
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
@@ -23,11 +23,11 @@ def format_msd():
 
 def generate_randomized_tumors():
     tumor_inserter = InsertTumorPipeline()
-    json_file_path = "./assets/source/dataset.json"
+    json_file_path = "./assets/images/source/dataset.json"
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
 
-    json_seed_path = "./assets/seeds/dataset.json"
+    json_seed_path = "./assets/images/seeds/dataset.json"
     with open(json_seed_path, 'r') as json_file:
         seeds_dict = json.load(json_file)
 
@@ -36,7 +36,7 @@ def generate_randomized_tumors():
 def mask_hosts():
     lung_masker = LMInferer()
     host_masker = LungMaskPipeline(lung_masker)
-    json_file_path = "./assets/source/dataset.json"
+    json_file_path = "./assets/images/source/dataset.json"
     with open(json_file_path, 'r') as json_file:
         image_dict = json.load(json_file)
     
