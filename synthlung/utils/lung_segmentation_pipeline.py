@@ -63,7 +63,7 @@ class HostJsonGenerator(JSONGenerator):
         for filename in os.listdir(self.path):
             if filename.endswith((NII_GZ_EXTENSION)):
                 sample_data = {
-                    "host_image": "./assets/source/hosts/" + (filename[:filename.index(LABEL_NII_GZ)] + IMAGE_NII_GZ).replace('host_', 'source_'),
+                    "host_image": "./assets/images/hosts/" + (filename[:filename.index(LABEL_NII_GZ)] + IMAGE_NII_GZ).replace('host_', 'source_'),
                     "host_label": self.path + filename
                 }
                 dataset_json.append(sample_data)
