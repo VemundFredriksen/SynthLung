@@ -43,7 +43,7 @@ class LungMaskPipeline(object):
         self.compose = Compose([
             LoadImaged(keys=['image'], image_only = False),
             MaskLungs(lungmask_inferer=self.inferer),
-            SaveImaged(keys=['mask'], output_dir='./assets/hosts/', output_postfix='', separate_folder=False)
+            SaveImaged(keys=['mask'], output_dir='./assets/images/hosts/', output_postfix='', separate_folder=False)
         ])
 
     def __call__(self, image_dict) -> Any:
@@ -63,7 +63,7 @@ class HostJsonGenerator(JSONGenerator):
         for filename in os.listdir(self.path):
             if filename.endswith((NII_GZ_EXTENSION)):
                 sample_data = {
-                    "host_image": "./assets/source/msd/" + (filename[:filename.index(LABEL_NII_GZ)] + IMAGE_NII_GZ).replace('host_', 'source_'),
+                    "host_image": "./assets/images/hosts/" + (filename[:filename.index(LABEL_NII_GZ)] + IMAGE_NII_GZ).replace('host_', 'source_'),
                     "host_label": self.path + filename
                 }
                 dataset_json.append(sample_data)

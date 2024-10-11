@@ -64,14 +64,13 @@ class RenameSourceToSeed(object):
     
 
 class TumorCropPipeline(object):
-    monai.config.BACKEND = "Nibabel"
     def __init__(self) -> None:
         self.compose = Compose([
             LoadImaged(keys=['image', 'label'], image_only = False),
             TumorSeedIsolationd(image_key='image', label_key='label', image_output_key='seed_image', label_output_key='seed_label'),
             RenameSourceToSeed(meta_dict_keys=['seed_image_meta_dict', 'seed_label_meta_dict']),
-            SaveImaged(keys=['seed_image'], output_dir='./assets/seeds/', output_postfix='', separate_folder=False),
-            SaveImaged(keys=['seed_label'], output_dir='./assets/seeds/', output_postfix='', separate_folder=False)
+            SaveImaged(keys=['seed_image'], output_dir='./assets/images/seeds/', output_postfix='', separate_folder=False, writer=monai.data.NibabelWriter),
+            SaveImaged(keys=['seed_label'], output_dir='./assets/images/seeds/', output_postfix='', separate_folder=False, writer=monai.data.NibabelWriter)
         ])
     
     def __call__(self, image_dict) -> None:
