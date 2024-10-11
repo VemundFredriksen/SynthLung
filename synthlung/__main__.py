@@ -13,7 +13,7 @@ def seed():
         image_dict = json.load(json_file)
     crop_pipeline = TumorCropPipeline()
     crop_pipeline(image_dict)
-    formatter = MSDGenerateJSONFormatter("./assets/seeds/")
+    formatter = MSDGenerateJSONFormatter("./assets/images/seeds/")
     formatter.generate_json()
 
 def format_msd():
@@ -41,7 +41,7 @@ def mask_hosts():
         image_dict = json.load(json_file)
     
     host_masker(image_dict)
-    json_generator = HostJsonGenerator('./assets/hosts/')
+    json_generator = HostJsonGenerator('./assets/images/hosts/')
     json_generator.generate_json()
 
 def main():
